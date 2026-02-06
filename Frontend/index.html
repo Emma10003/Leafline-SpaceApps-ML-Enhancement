@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BloomBee</title>
+        <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous">
+        </script>
+        </script>
+        <link rel="stylesheet" href="css/font.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/index.css" />
+        <link rel="stylesheet" href="css/todoList.css" />
+        <link rel="stylesheet" href="css/chat.css" />
+        <link rel="styleshhet" href="css/community.css" />
+        <link rel="icon" type="image/png" href="img/logo/favicon.png" />
+    </head>
+    <body>
+        <div class="page-wrap">
+            <div class="nav-wrap">
+                <div class="nav">
+                    <a href="pages/start.html">
+                        <div class="logo">
+                            <img src="img/logo/logo_small.png" class="logo-img" width="150px" />
+                        </div>
+                    </a>
+                    <div class="menu">
+                        <!-- 메뉴 선택 바 모양 적용 시작 -->
+                        <div class="nav-honey"></div>
+                        <!-- 메뉴 선택 바 모양 적용 끝 -->
+                        <div class="menu-item" data-page="dashboard" id="menuDashboard">
+                            <div class="menu-img">
+                                <img
+                                    src="img/icon_common/icon_nav_dashboard_gray.png"
+                                    width="40px"
+                                    class="item-img"
+                                    id="dashboard" />
+                            </div>
+                            <div class="menu-text font-m">Dashboard</div>
+                        </div>
+                        <div class="menu-item" data-page="calendar" id="menuCalendar">
+                            <div class="menu-img">
+                                <img
+                                    src="img/icon_common/icon_nav_calendar_gray.png"
+                                    width="40px"
+                                    class="item-img"
+                                    id="calendar" />
+                            </div>
+                            <div class="menu-text font-m">Calendar</div>
+                        </div>
+                        <div class="menu-item" data-page="community" id="menuCommunity">
+                            <div class="menu-img">
+                                <img
+                                    src="img/icon_common/icon_nav_community_gray.png"
+                                    width="40px"
+                                    class="item-img"
+                                    id="community" />
+                            </div>
+                            <div class="menu-text font-m">Community</div>
+                        </div>
+                        <div class="menu-item" data-page="setting" id="menuSetting">
+                            <div class="menu-img">
+                                <img
+                                    src="img/icon_common/icon_nav_setting_gray.png"
+                                    width="40px"
+                                    class="item-img"
+                                    id="setting" />
+                            </div>
+                            <div class="menu-text font-m">Setting</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chatbot-wrap">
+                    <div class="chatbot">
+                        <div class="chatbot-item">
+                            <div class="line">
+                                <hr width="140px" />
+                            </div>
+                            <div class="chatbot-menu" data-page="chatbot">
+                                <div class="menu-img">
+                                    <img src="img/icon_common/icon_nav_chatbot_yellow.png" width="40px" />
+                                </div>
+                                <div class="font-m font-main">Bloom Ai</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="dBody">
+            <div class="body-container">
+                <!-- 상단 8%: 인사말 + 위치 + 알림 -->
+                <header class="header-section">
+                    <div class="greeting-group">
+                        <h1 class="greeting-text font-r">Good morning, Alex 👋</h1>
+                        <div class="location-info">
+                            <img
+                                src="img/icon_common/icon_location_small_gray.png"
+                                alt="location"
+                                width="16"
+                                height="16" />
+                            <span>Alex's Honey • Orlando, FL</span>
+                        </div>
+                    </div>
+                    <div class="notification-icon">
+                        <img src="img/icon_common/icon_notification.png" alt="notification" />
+                    </div>
+                </header>
+
+                <!-- 중단 25%: Todo 60% + Weather 40% -->
+                <section class="middle-section">
+                    <div class="todo-section">
+                        <div class="todo-frame-wrapper">
+                            <iframe
+                                class="todo-frame"
+                                src="pages/todoList.html"
+                                title="Daily to do list"
+                                loading="lazy"></iframe>
+                        </div>
+                    </div>
+                    <div class="weather-section">
+                        <div class="weather-frame-wrapper">
+                            <iframe
+                                class="weather-frame"
+                                src="pages/weather.html"
+                                title="Weather information"
+                                loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 하단 67%: Dashboard / Calendar -->
+                <section class="bottom-section">
+                    <!-- <span class="view-label">Dashboard / Calendar</span> -->
+                    <div class="frame-wrapper">
+                        <iframe
+                            id="contentFrame"
+                            class="scaled-frame"
+                            src="pages/dashboard.html"
+                            title="BloomBee content"
+                            loading="lazy"></iframe>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- 챗봇 모달 -->
+        <div id="chatModal" class="chat-modal hidden">
+            <!-- 채팅 컨테이너 -->
+            <div class="chat-container">
+                <!-- 헤더 -->
+                <div class="chat-header">
+                    <div class="chat-logo">
+                        <img src="img/chatting/Chatting logo.png" alt="Bloom AI" />
+                    </div>
+                    <div class="chat-header-buttons">
+                        <div class="chat-menu">
+                            <img src="img/chatting/icon_hamburger.png" alt="menu" />
+                        </div>
+                        <div class="chat-close" id="chatClose">
+                            <span>✕</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 메시지 영역 -->
+                <div class="chat-messages" id="chatMessages">
+                    <!-- 메시지들이 여기에 동적으로 추가됩니다 -->
+                </div>
+
+                <!-- 입력 영역 -->
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" class="chat-input" placeholder="메시지를 입력하세요..." />
+                    <button id="sendButton" class="send-button" disabled>
+                        <img id="sendIcon" src="img/chatting/icon_send_gray.png" alt="send" />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/index.js"></script>
+        <script src="js/chat.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const menuItems = document.querySelectorAll(".menu-item, .chatbot-menu");
+                const contentFrame = document.getElementById("contentFrame");
+                const frameScale = {
+                    dashboard: 1,
+                    calendar: 0.8,
+                };
+
+                function setMenuActive(targetPage) {
+                    document.querySelectorAll(".menu-item").forEach((item) => {
+                        const isActive = item.getAttribute("data-page") === targetPage;
+                        item.classList.toggle("active", isActive);
+                    });
+                }
+
+                function switchContent(page) {
+                    // 커뮤니티 페이질 경우, 미들 세션 숨기기
+                    if (page == "community") {
+                        document.querySelector(".middle-section").style.display = "none";
+                        // document.querySelector(".view-label").style.display = "none";
+                        const label = document.querySelector(".view-label"); // 추가
+                        if (label) lable.style.display = "none"; // 추가
+                        document.querySelector(".bottom-section").style.height = "100%";
+                    } else {
+                        document.querySelector(".middle-section").style.display = "flex";
+                        const label = document.querySelector(".view-label"); // 추가
+                        if (label) label.style.display = ""; // 추가
+                        document.querySelector(".bottom-section").style.height = ""; // 추가
+                    }
+                    switch (page) {
+                        case "dashboard":
+                            contentFrame.src = "pages/dashboard.html";
+                            break;
+                        case "calendar":
+                            contentFrame.src = "pages/calendar.html";
+                            break;
+                        case "community":
+                            contentFrame.src = "pages/community.html";
+                            break;
+                        case "setting":
+                            alert("Setting 페이지는 준비 중입니다.");
+                            return;
+                        case "chatbot":
+                            openChatModal();
+                            return;
+                        default:
+                            contentFrame.src = "pages/dashboard.html";
+                    }
+
+                    const scale = frameScale[page] || frameScale.dashboard;
+                    contentFrame.style.setProperty("--frame-scale", scale);
+                    setMenuActive(page);
+                }
+
+                menuItems.forEach((item) => {
+                    item.style.cursor = "pointer";
+                    item.addEventListener("click", () => {
+                        switchContent(item.getAttribute("data-page"));
+                    });
+                });
+
+                // 초기 상태 설정
+                contentFrame.style.setProperty("--frame-scale", frameScale.dashboard);
+                setMenuActive("dashboard");
+
+                // 페이지 전체를 80%로 축소
+                document.body.style.zoom = "1.0";
+            });
+        </script>
+    </body>
+</html>

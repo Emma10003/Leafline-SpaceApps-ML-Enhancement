@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community | BloomBee</title>
+    
+    <!-- Common stylesheets -->
+    <link rel="stylesheet" href="../css/font.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <!-- Page-specific stylesheet -->
+    <link rel="stylesheet" href="../css/community.css">
+    
+    <link rel="icon" type="image/png" href="../img/logo/favicon.png" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Community</h1>
+            <button id="write-post-btn">Write Post</button>
+        </header>
+        <main>
+            <ul id="post-list">
+                <!-- Posts will be dynamically added here by JavaScript -->
+            </ul>
+        </main>
+    </div>
+
+    <!-- Modal for new post -->
+    <div id="post-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>New Post</h2>
+            <form id="post-form">
+                <input type="text" id="post-title" placeholder="Title" required>
+                <textarea id="post-content" placeholder="Content" rows="10" required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/community.js"></script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+/* =========================================
+        Live Map, Chart Visualization
+========================================= */
+.subpage-wrap {
+    /* max-width: ; */
+    /* max-height: ; */
+    border: 2px;
+    border-color: red;
+    /* padding-top: 0px; */
+    /* padding-left: 20px; */
+}
+
+.page-item {
+    display: flex;
+    gap: 20px;
+}
+
+.map-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 60vw;
+}
+
+/* ================================= */
+/* Live Map 영역 */
+.map-item {
+    position: relative;
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.map-title {
+    vertical-align: center;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.map-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.map-title h1 {
+    padding: 0px;
+    margin: 0px;
+}
+
+.map-title p {
+    padding: 0px;
+    margin: 0px;
+}
+
+.map-menu {
+    display: flex;
+    margin-left: auto;
+    gap: 8px;
+}
+
+/* toggle */
+.toggle-container {
+    position: relative;
+    display: flex;
+    width: 150px;
+    height: 32.67px;
+    border: 1.5px solid #ccc8c2;
+    border-radius: 8px;
+    padding: 4px; /* 컨테이너와 버튼 사이 여백 */
+    background: #f7f5f2;
+}
+
+.toggle-option {
+    flex: 1;
+    text-align: center;
+    vertical-align: center;
+    align-items: center;
+    line-height: 20px;
+    cursor: pointer;
+    z-index: 2; /* highlight보다 위에 텍스트 표시 */
+    font-weight: 500;
+    color: #666;
+    user-select: none;
+    transition: color 0.3s ease;
+}
+
+.highlight {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    width: calc(50% - 4px);
+    height: 25px;
+    background: #222;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+.toggle-container[data-active="my"] .highlight {
+    transform: translateX(0);
+}
+
+.toggle-container[data-active="event"] .highlight {
+    transform: translateX(100%);
+}
+
+/* 선택된 상태 글자 스타일 */
+.toggle-container[data-active="my"] .toggle-option.my {
+    color: white;
+    font-size: 18px;
+}
+
+.toggle-container[data-active="event"] .toggle-option.event {
+    color: white;
+    font-size: 18px;
+}
+
+/* map size button */
+#sizeBtn {
+    position: absolute;
+    bottom: 50px;
+    left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Google Maps 컨테이너 스타일 */
+#map {
+    width: 100%;
+    height: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+/* 지도 로딩 중 표시 */
+#map:empty::before {
+    content: "Loading map...";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 18px;
+    color: #666;
+    background: #f5f5f5;
+}
+
+/* ================================
+   벌 비행 범위 토글 버튼
+================================ */
+
+.bee-range-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toggle-label {
+    /* font-size: 14px; */
+    user-select: none;
+    cursor: pointer;
+}
+
+/* 토글 스위치 컨테이너 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+/* 실제 체크박스 숨김 */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* 슬라이더 배경 */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 26px;
+}
+
+/* 슬라이더 원형 버튼 */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 체크 상태일 때 배경색 (황금색) */
+input:checked + .slider {
+    background-color: #ffd700;
+}
+
+/* 체크 상태일 때 원형 버튼 이동 */
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* 호버 효과 */
+.slider:hover {
+    opacity: 0.9;
+}
+
+/* 포커스 효과 (키보드 접근성) */
+input:focus + .slider {
+    box-shadow: 0 0 1px #ffd700;
+}
+
+/* Blooming Area CheckBox */
+
+#mapCheckBox {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    bottom: 30px;
+    left: 15px;
+    background-color: #ffffff;
+    border: 1px solid #ccc8c2;
+    border-radius: 6px;
+    padding: 18px 12px;
+    z-index: 10;
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    /* margin-bottom: 8px; */
+}
+
+/* 실제 checkbox는 안 보이게 설정 */
+.check input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkbox-text::before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+
+    background-image: url("../img/live map/checkbox/checkbox/checkbox_default.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.checkbox-text.checked::before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+
+    background-image: url("../img/live map/checkbox/checkbox/checkbox_active.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.checkbox-text {
+    display: flex;
+    align-items: center;
+    color: #ff462d;
+}
+
+/* ================================= */
+/* chart-item */
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1; /* 부모 요소의 남은 공간을 모두 차지 */
+}
+
+.chart-item {
+    height: 32.67px;
+}
+
+.chart-title h1 {
+    padding: 0px;
+    margin: 0px;
+}
+
+#chartBox {
+    flex-grow: 1;
+    height: 80vh;
+    border-radius: 10px;
+    background-color: #f7f5f2;
+    margin-right: 20px;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+/* 차트 내용 title */
+.box-title .title-main {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box-title .title-main h1 {
+    font-size: 28px;
+    margin: 0;
+    padding: 0;
+}
+
+.title-main .flower {
+    display: flex;
+    gap: 5px;
+}
+
+.flower-font {
+    color: #ff462d;
+}
+
+/* 일단 추가해보기... */
+.box-chart {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 18px;
+    box-sizing: border-box;
+}
+
+.chart {
+    width: 100% !important;
+    height: 87% !important;
+}
+
+.honey-toggle {
+    display: flex;
+    gap: 8px;
+}
+
+.honey-toggle .text {
+    color: #ffca80;
+    /* font: medium */
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+/* 기존의 체크박스 숨기기 */
+.honey-toggle input[type="checkbox"] {
+    display: none;
+}
+
+/* 커스텀 아이콘 */
+.honey-toggle .honey-icon {
+    width: 20px;
+    height: 20px;
+    background-image: url("../img/live map/honey_radio_default.png"); /* 비활성 이미지 */
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+}
+
+/* 체크 시 활성 이미지로 변경 */
+.honey-toggle input:checked + .honey-icon {
+    background-image: url("../img/live map/honey_radio_active.png"); /* 활성 이미지 */
+    transform: scale(1.1);
+}
