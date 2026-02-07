@@ -628,6 +628,8 @@ $(function () {
 /* ================================
             ML api 호출
 ================================ */
+console.log("[dashboard.js] fetching", API_URL);
+
 async function predictHoney(month, species) {
     const res = await fetch("/api/ml/predict-honey", {
         method: "POST",
