@@ -1,4 +1,5 @@
 # 🌿 Leafline
+
 ### AI-Powered Beekeeping Assistant for Maximizing Honey Harvests
 
 **Leafline**은 현대 양봉업자들이 마주하는 도전 과제들을 해결하기 위해 탄생한 AI 기반 서비스입니다. 저희는 개화 시기 예측의 불확실성과 전 세계적인 꿀벌 군집 붕괴 현상에 주목하여, 데이터와 기술을 통해 양봉업의 지속 가능성을 높이고자 합니다.
@@ -25,15 +26,16 @@
 - **Deployment**: AWS EC2 (Backend), Vercel (Frontend)
 
 ## 🏆 팀 소개 (Meet the Team)
+
 저희는 NASA Space Apps Challenge에서 만나 이 프로젝트를 시작했습니다.
 
-| Name | GitHub | Role |
-| :--- | :--- | :--- |
+| Name       | GitHub                                            | Role                   |
+| :--------- | :------------------------------------------------ | :--------------------- |
 | **홍기현** | [CodeBBackGoSu](https://github.com/CodeBBackGoSu) | Backend, Product Owner |
-| **조은서** | [theeunseojo](https://github.com/theeunseojo) | Backend |
-| **오유성** | [Emma10003](https://github.com/Emma10003) | Frontend |
-| **은영** | [euny802](https://github.com/euny802) | Frontend |
-| **윤세휘** | [thw-hwistle](https://github.com/thw-hwistle) | Data Analyst, Modeling |
+| **조은서** | [theeunseojo](https://github.com/theeunseojo)     | Backend                |
+| **오유성** | [Emma10003](https://github.com/Emma10003)         | Frontend               |
+| **은영**   | [euny802](https://github.com/euny802)             | Frontend               |
+| **윤세휘** | [thw-hwistle](https://github.com/thw-hwistle)     | Data Analyst, Modeling |
 
 ---
 
@@ -76,9 +78,34 @@ uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 서버가 시작되면 다음 주소로 접속할 수 있습니다:
+
 - **API**: `http://localhost:8000`
 - **API 문서 (Swagger)**: `http://localhost:8000/docs`
 - **API 문서 (ReDoc)**: `http://localhost:8000/redoc`
+
+---
+
+## 🧠 ML(머신러닝) 예측 API
+
+AI POC 흐름(학습 → 아티팩트 → 서빙)을 위해 ML 예측 엔드포인트를 추가할 수 있습니다.
+
+- 학습 스크립트: `BackEnd/ml/train.py`
+- 모델 아티팩트: `BackEnd/app/ml/artifacts/bloom_honey_model.joblib`
+- 예측 API 예시: `POST /api/ml/predict-honey`
+
+> 루트(전체 프로젝트) README에 Docker/배포/트러블슈팅을 포함해 보다 상세한 안내가 있습니다.
+
+---
+
+## 🐳 Docker (선택)
+
+로컬 또는 배포 환경에서 재현 가능한 실행을 위해 Dockerfile 기반 실행을 권장합니다.
+
+```bash
+cd BackEnd
+docker build -t bloombee-backend .
+docker run --rm -p 8000:8000 bloombee-backend
+```
 
 ## 📁 프로젝트 구조
 
@@ -122,6 +149,7 @@ uv remove fastapi
 ### 의존성 동기화
 
 `pyproject.toml` 파일 기준으로 가상환경을 최신 상태로 맞춥니다.
+
 ```bash
 uv sync
 ```
@@ -152,6 +180,6 @@ uv run pytest
 ## 🤝 기여하기
 
 1. 브랜치 생성 (`git checkout -b feature/amazing-feature`)
-2. 변경사항     커밋 (`git commit -m 'Add some amazing feature'`)
+2. 변경사항 커밋 (`git commit -m 'Add some amazing feature'`)
 3. 브랜치에 푸시 (`git push origin feature/amazing-feature`)
 4. Pull Request 생성

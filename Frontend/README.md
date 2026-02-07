@@ -2,7 +2,7 @@
 
 ## 🌿 Git 워크플로우
 
-### 📋 작업 프로세스    
+### 📋 작업 프로세스
 
 #### 1️⃣ 새 브랜치 생성 및 작업
 
@@ -65,8 +65,8 @@ GitHub PR 페이지에서:
 
 1. 코드 리뷰 완료 후
 2. **"Squash and merge"** 버튼 클릭
-   - 여러 개의 커밋이 하나로 합쳐짐
-   - 깔끔한 히스토리 유지
+    - 여러 개의 커밋이 하나로 합쳐짐
+    - 깔끔한 히스토리 유지
 3. 커밋 메시지 확인/수정
 4. "Confirm squash and merge" 클릭
 
@@ -144,6 +144,7 @@ chore:    빌드 업무, 패키지 매니저 설정 등
 ```
 
 **예시:**
+
 ```bash
 git commit -m "feat: 사용자 프로필 페이지 추가"
 git commit -m "fix: 로그인 버튼 클릭 오류 수정"
@@ -155,20 +156,24 @@ git commit -m "refactor: API 호출 로직 개선"
 ## ❓ FAQ
 
 ### Q: Rebase vs Merge 차이는?
+
 - **Rebase**: 커밋 히스토리를 일직선으로 유지 (깔끔함) ✅
 - **Merge**: 브랜치의 분기/병합 히스토리 유지
 
 ### Q: Squash Merge를 왜 사용하나요?
+
 - 작업 중 생긴 수많은 커밋을 하나로 합침
 - main 브랜치 히스토리가 깔끔해짐
 - 기능 단위로 커밋 관리 가능
 
 ### Q: force push가 위험하지 않나요?
+
 - `--force-with-lease` 사용으로 안전하게 처리
 - 혼자 작업하는 브랜치에서만 사용
 - main 브랜치에는 절대 force push 금지! ⛔
 
 ### Q: Rebase 중 충돌이 너무 많아요
+
 ```bash
 # Rebase 취소하고 Merge 사용
 git rebase --abort
@@ -184,22 +189,3 @@ git merge origin/main
 3. ✅ **항상 브랜치를 만들어서 작업**
 4. ✅ **Push 전에 최신 main rebase**
 5. ✅ **의미 있는 커밋 메시지 작성**
-
----
-
-## 🛠️ 개발 환경 설정
-
-(프론트엔드 개발 환경 설정 내용은 여기에 추가)
-
-```bash
-# Node.js 설치 확인
-node --version
-npm --version
-
-# 의존성 설치
-npm install
-
-# 개발 서버 실행
-npm run dev
-```
-

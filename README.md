@@ -142,6 +142,11 @@ AI 캘린더는 월별, 일별 작업을 체계적으로 계획하고 관리할 
     ```
     서버가 정상적으로 실행되면 `http://127.0.0.1:8000`에서 API 문서를 확인할 수 있습니다.
 
+#### ✅ Swagger UI / OpenAPI 스펙 확인
+
+- Swagger UI: `http://127.0.0.1:8000/docs`
+- OpenAPI JSON: `http://127.0.0.1:8000/openapi.json`
+
 ### Frontend (JavaScript)
 
 프론트엔드 코드는 별도의 빌드 과정 없이 브라우저에서 바로 실행할 수 있습니다.
@@ -150,6 +155,144 @@ AI 캘린더는 월별, 일별 작업을 체계적으로 계획하고 관리할 
     VS Code와 같은 코드 에디터에서 `Frontend` 폴더를 엽니다.
 2.  `index.html` 파일을 마우스 오른쪽 버튼으로 클릭하고, `Open with Live Server`를 선택하여 실행합니다.
 3.  Live Server가 실행되면 웹 브라우저에서 자동으로 페이지가 열립니다.
+
+---
+
+## 🧠 ML(머신러닝) 기능 추가 & AI POC 구성
+
+본 리팩토링에서는 **모델 학습(train) → 모델 아티팩트 저장(joblib) → API 서빙(inference) → 프론트 대시보드 연동**까지를 한 흐름으로 구성하여, "AI POC" 형태로 재현 가능하게 만들었습니다.
+
+### 1) 학습(Training)
+
+1. `BackEnd/ml/data.csv` 준비
+   - 최소 컬럼 예시: `month`, `species`, `honey_amount`
+2. 학습 스크립트 실행
+
+```bash
+cd BackEnd
+uv run python ml/train.py
+```
+
+3. 모델 파일 생성 확인
+   - 기본 경로 예시: `BackEnd/app/ml/artifacts/bloom_honey_model.joblib`
+
+### 2) 예측 API(Inference)
+
+예측 엔드포인트 예시:
+
+- `POST /api/ml/predict-honey`
+
+요청/응답 예시:
+
+```json
+// Request
+{ "month": 4, "species": "acacia" }
+
+// Response
+{ "month": 4, "species": "acacia", "predicted_honey_amount": 123.45 }
+```
+
+> 모델 파일이 없으면 500 에러가 발생할 수 있으므로, 배포/실행 전에 학습을 먼저 수행해 주세요.
+
+---
+
+## 🐳 Docker로 백엔드 실행하기 (로컬/배포 공통)
+
+### 1) Dockerfile 준비
+
+`BackEnd/Dockerfile`을 추가하여, FastAPI 서버를 컨테이너로 실행할 수 있도록 구성했습니다.
+
+### 2) 빌드/실행
+
+```bash
+cd BackEnd
+docker build -t bloombee-backend .
+docker run --rm -p 8000:8000 bloombee-backend
+```
+
+실행 후 확인:
+
+- Swagger UI: `http://localhost:8000/docs`
+- OpenAPI JSON: `http://localhost:8000/openapi.json`
+
+---
+
+## 🌐 배포(Deploy) 가이드
+
+### Frontend: Vercel 배포
+
+1. GitHub에 Frontend 코드를 푸시합니다.
+2. Vercel에서 **New Project → Import Git Repository**로 프로젝트를 연결합니다.
+3. 프레임워크가 자동 감지되며, 정적 사이트인 경우도 배포가 가능합니다.
+4. (권장) 환경변수로 API 주소를 분리합니다.
+   - 예: `VITE_API_BASE_URL` 또는 `API_BASE_URL`
+   - 프론트에서 `${API_BASE_URL}/api/...` 형태로 호출하도록 구성합니다.
+
+### Backend: Render 배포 (Docker)
+
+1. GitHub에 BackEnd 코드를 푸시합니다.
+2. Render에서 **New → Web Service → Build & Deploy from a Git Repository** 선택
+3. Environment에서 **Docker**를 선택합니다.
+4. Port는 `8000`으로 설정합니다.
+5. 배포 후 제공되는 URL(예: `https://xxxx.onrender.com`)을 프론트의 API_BASE_URL로 연결합니다.
+
+---
+
+## 🧯 트러블슈팅 (Troubleshooting)
+
+### A. Docker 관련
+
+**문제 1) `failed to connect to the docker API ... dockerDesktopLinuxEngine`**
+
+- 원인: Docker Desktop이 실행 중이 아니거나(daemon 미실행), WSL2 기반 Linux 엔진이 올라오지 않은 상태
+- 해결:
+  1) Docker Desktop 실행 → 상태가 **Running**인지 확인
+  2) Windows에서 WSL2 활성화 (`wsl --install`, `wsl --set-default-version 2`)
+  3) `docker version`에서 Server 정보가 출력되는지 확인
+
+**문제 2) `/docs` 접속 시 ERR_CONNECTION_REFUSED**
+
+- 원인: 컨테이너가 실행 중이 아니거나 포트 매핑이 잘못됨
+- 해결:
+  - `docker ps`로 컨테이너 실행 여부 확인
+  - `docker run -p 8000:8000 ...`로 포트 매핑 확인
+
+### B. ML 학습/서빙 관련
+
+**문제 3) `ColumnTransformer.__init__() got an unexpected keyword argument 'remainer'`**
+
+- 원인: `remainder` 오타
+- 해결: `remainer` → `remainder`로 수정
+
+**문제 4) `RandomForestRegressor is undefined`**
+
+- 원인: `RandomForestRegressor`를 import하지 않음(또는 Classifier/Regressor 혼용)
+- 해결:
+  - 회귀(수확량 예측)면 `from sklearn.ensemble import RandomForestRegressor` 사용
+
+**문제 5) 예측 API 호출 시 500(Model not found)**
+
+- 원인: `bloom_honey_model.joblib`가 컨테이너/서버에 포함되지 않음
+- 해결:
+  1) 로컬에서 `uv run python ml/train.py`로 모델 생성
+  2) `BackEnd/app/ml/artifacts/` 경로에 모델 파일이 있는지 확인
+  3) Docker 이미지 빌드 전에 모델 파일이 존재하는지 확인
+
+### C. Front ↔ Back 연동(CORS/프록시) 관련
+
+**문제 6) 브라우저 콘솔에 CORS 에러**
+
+- 원인: 프론트 도메인과 백엔드 도메인이 달라 브라우저가 차단
+- 해결(택1):
+  - FastAPI에 CORS 허용(프론트 도메인 추가)
+  - 프론트에서 프록시 설정(Vite proxy 등)으로 `/api`를 백엔드로 라우팅
+
+**문제 7) 배포 후 프론트가 로컬 `localhost:8000`으로 호출함**
+
+- 원인: API_BASE_URL을 하드코딩해 둔 경우
+- 해결:
+  - Vercel 환경변수로 API 주소를 주입하고, 프론트는 환경변수 기반으로 호출
+
 
 <br>
 
