@@ -11,7 +11,7 @@ class BloomDataPoint(BaseModel):
 # 꿀 생산량 데이터의 각 항목 모델 (month, amount)
 class HoneyDataPoint(BaseModel):
     month: int
-    amount: int
+    amount: float
 
 # 'bloom' 키 내부에 있는 중첩된 객체의 모델
 class BloomData(BaseModel):

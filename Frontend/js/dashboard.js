@@ -308,7 +308,7 @@ dashboard.js 파일 내에서 fetch 함수를 사용하여 위 API 엔드포인�
 API로부터 받은 JSON 데이터를 사용하여 차트를 렌더링하는 로직을 구현해 주세요.
 ================================ */
 /* ======= Blooming Chart JS (Honey 토글 복구) ======= */
-const API_URL = "/api/charts/bloom-watch";
+const API_URL = "/api/charts/bloom-watch?use_ml=true&species=almond";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const NOW = new Date();
@@ -566,15 +566,15 @@ function buildChart(bloomData, honeyData) {
     $(".title-radio")
         .empty()
         .append(
-            '<label class="honey-toggle"> <input type="checkbox" id="toggleHoney"> <div class="honey-icon"></div> <span class="text">Honey</span> </label>'
+            '<label class="honey-toggle"> <input type="checkbox" id="toggleHoney"> <div class="honey-icon"></div> <span class="text">Honey</span> </label>',
         );
 
     let payload;
     try {
         console.log("API URL : ", API_URL);
-        // const r = await fetch(API_URL, { headers: { Accept: "application/json" } });
-        // if (!r.ok) throw new Error(`bad status ${r.status}`);
-        // payload = await r.json();
+        const r = await fetch(API_URL, { headers: { Accept: "application/json" } });
+        if (!r.ok) throw new Error(`bad status ${r.status}`);
+        payload = await r.json();
     } catch (e) {
         console.warn("API failed, using FALLBACK:", e);
         payload = FALLBACK;
@@ -631,11 +631,11 @@ $(function () {
 async function predictHoney(month, species) {
     const res = await fetch("/api/ml/predict-honey", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({month, species})
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ month, species }),
     });
 
-    if(!res.ok) {
+    if (!res.ok) {
         const msg = await res.text();
         throw new Error(msg);
     }
@@ -643,5 +643,5 @@ async function predictHoney(month, species) {
 }
 
 document.querySelector("#btnPredict").addEventListener("click", async () => {
-    const month = Number(document.querySelector("#inputMonth"))
-})
+    const month = Number(document.querySelector("#inputMonth"));
+});

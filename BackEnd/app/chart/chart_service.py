@@ -3,32 +3,49 @@ from fastapi import HTTPException
 from datetime import datetime
 from app.chart import chart_database
 
-def get_current_year_bloom_data():
+# ML 예측 함수 import
+from app.ml.ml_service import predict_honey
+
+def get_current_year_bloom_data(species: str = "almond", use_ml: bool = False):
     """
     현재 연도 데이터를 가져와 프론트엔드가 예상하는
     {"bloom": {...}, "honey": [...]} 형태로 재구성하여 반환합니다.
     """
     current_year = datetime.now().year
+    current_month = datetime.now().month
 
-    if current_year in chart_database.bloom_data:
-        # 원본 데이터를 가져옵니다.
-        original_data = chart_database.bloom_data[current_year]
+    if current_year not in chart_database.bloom_data:
+        raise HTTPException(status_code=404, detail=f"Chart data for {current_year} not found")
 
-        # 프론트엔드가 예상하는 형태로 데이터를 재구성합니다.
-        formatted_data = {
-            "bloom": {
-                "acacia": original_data.get("acacia", []),
-                "almond": original_data.get("almond", [])
-            },
-            "honey": original_data.get("honey", [])
-        }
+    original_data = chart_database.bloom_data[current_year]
 
-        # print() 함수는 서버를 실행한 터미널에 결과를 출력합니다.
-        print("✅ Formatted Data:")
-        print(formatted_data)
+    bloom = {
+        "acacia": original_data.get("acacia", []),
+        "almond": original_data.get("almond", []),
+    }
 
-        # 재구성한 데이터를 반환합니다.
-        return formatted_data
+    honey_original = original_data.get("honey", [])
+    honey_map = {}
+    for it in honey_original:
+        try:
+            m = int(it.get("month"))
+            a = float(it.get("amount"))
+            honey_map[m] = a
+        except Exception:
+            continue
 
-    # if 조건이 맞지 않을 때(데이터가 없을 때) 실행되도록 안으로 이동
-    raise HTTPException(status_code=404, detail=f"Chart data for the current year ({current_year}) not found")
+    honey = []
+    for m in range(1, 13):
+        if(not use_ml) or (m <= current_month and m in honey_map):
+            amount = float(honey_map.get(m, 0.0))
+        else:
+            amount = float(predict_honey(month=m, species=species))
+        
+        honey.append({"month": m, "amount": amount})
+
+    formatted_data = {"bloom": bloom, "honey": honey}
+
+    print("✅ Formatted Data:")
+    print(formatted_data)
+
+    return formatted_data
