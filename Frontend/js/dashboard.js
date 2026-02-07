@@ -569,10 +569,13 @@ function buildChart(bloomData, honeyData) {
             '<label class="honey-toggle"> <input type="checkbox" id="toggleHoney"> <div class="honey-icon"></div> <span class="text">Honey</span> </label>',
         );
 
+    console.log("[dashboard.js] fetching", API_URL);
     let payload;
     try {
         console.log("API URL : ", API_URL);
         const r = await fetch(API_URL, { headers: { Accept: "application/json" } });
+        console.log("[dashboard.js] status", r.status);
+
         if (!r.ok) throw new Error(`bad status ${r.status}`);
         payload = await r.json();
     } catch (e) {
@@ -628,7 +631,6 @@ $(function () {
 /* ================================
             ML api 호출
 ================================ */
-console.log("[dashboard.js] fetching", API_URL);
 
 async function predictHoney(month, species) {
     const res = await fetch("/api/ml/predict-honey", {
