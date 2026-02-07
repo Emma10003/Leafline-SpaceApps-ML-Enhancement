@@ -90,7 +90,7 @@ rel="stylesheet">
 ========================================= */
 /* 네비게이션 메뉴에 적용되는 폰트 사이즈 */
 .font-nav {
-    font-size: ;
+    font-size: 16px;
 }
 
 /* Daily to do List, Weather,
@@ -110,10 +110,10 @@ Live Map, Chart Visualization, Calendar 제목 폰트 사이즈 */
 
 /* to do List 블럭의 메인 글자 */
 .font-todo-title {
-    font-size: ;
+    font-size: 18px;
 }
 
 /* to do List 블럭의 작은 글자 */
 .font-todo-sub {
-    font-size: ;
+    font-size: 14px;
 }

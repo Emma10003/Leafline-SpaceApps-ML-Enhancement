@@ -624,3 +624,24 @@ $(function () {
         }
     });
 });
+
+/* ================================
+            ML api 호출
+================================ */
+async function predictHoney(month, species) {
+    const res = await fetch("/api/ml/predict-honey", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({month, species})
+    });
+
+    if(!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg);
+    }
+    return await res.json();
+}
+
+document.querySelector("#btnPredict").addEventListener("click", async () => {
+    const month = Number(document.querySelector("#inputMonth"))
+})

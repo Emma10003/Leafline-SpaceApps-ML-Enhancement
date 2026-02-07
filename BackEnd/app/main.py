@@ -11,6 +11,7 @@ from app.chart.chart_router import router as chart_router
 from app.chat.chat_router import router as chat_router
 from app.calendar.calendar_router import router as calendar_router
 from app.community.community_router import router as community_router
+from app.ml.ml_router import router as ml_router
 
 
 app = FastAPI(
@@ -39,6 +40,7 @@ app.include_router(chart_router, prefix="/api")
 app.include_router(chat_router, prefix="/api")
 app.include_router(calendar_router)
 app.include_router(community_router, prefix="/api")
+app.include_router(ml_router, prefix="/api")
 
 
 @app.get("/", tags=["Root"])
@@ -49,3 +51,5 @@ async def root():
         "version": settings.APP_VERSION,
         "docs": "/docs",
     }
+
+app.include_router(ml_router, prefix="/api")
